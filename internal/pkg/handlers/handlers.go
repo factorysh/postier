@@ -44,7 +44,12 @@ func Handle(m *history.Memory) http.Handler {
 
 // HandleHistory respond to a get request on /history
 func HandleHistory(m *history.Memory) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
 		m.Mutex.Lock()
 		defer m.Mutex.Unlock()
 
