@@ -51,7 +51,8 @@ func HandleHistory(m *history.Memory) http.Handler {
 		m.Mutex.Lock()
 		defer m.Mutex.Unlock()
 
-		data, err := json.Marshal(m.Requests)
+		requests := m.Requests.FilterURL(r.URL.Query().Get("url"))
+		data, err := json.Marshal(requests)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
