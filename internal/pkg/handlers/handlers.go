@@ -32,7 +32,7 @@ func Handle(m *history.Memory) http.Handler {
 		m.Requests = append(m.Requests, history.Request{
 			TS:      time.Now(),
 			Host:    r.Host,
-			URL:     *&r.URL.Path,
+			URL:     r.URL.Path,
 			Method:  r.Method,
 			Headers: r.Header,
 			Body:    string(content),
