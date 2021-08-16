@@ -20,10 +20,6 @@ type Request struct {
 type Memory struct {
 	Mutex    sync.RWMutex `json:"-"`
 	Requests []Request    `json:"requests"`
-	// Count all requests that are not post requests
-	NonPostCounter int `json:"non_post_requests"`
-	// Count all body read errors
-	ReadBodyErrorCounter int `json:"read_body_errors"`
 }
 
 // NewMemory inits a new memory tape

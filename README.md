@@ -46,31 +46,28 @@ Fetch history
 curl http://localhost:8042/postier-history | jq .
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   287  100   287    0     0   161k      0 --:--:-- --:--:-- --:--:--  280k
-{
-  "requests": [
-    {
-      "timestamp": "2021-08-12T17:14:48.165194467+02:00",
-      "url": "/test",
-      "headers": {
-        "Accept": [
-          "*/*"
-        ],
-        "Content-Length": [
-          "4"
-        ],
-        "Content-Type": [
-          "application/x-www-form-urlencoded"
-        ],
-        "User-Agent": [
-          "curl/7.78.0"
-        ]
-      },
-      "method": "POST",
-      "body": "test"
-    }
-  ],
-  "non_post_requests": 0,
-  "read_body_errors": 0
-}
+100   254  100   254    0     0   315k      0 --:--:-- --:--:-- --:--:--  248k
+[
+  {
+    "timestamp": "2021-08-16T15:40:59.32346424+02:00",
+    "host": "localhost:8042",
+    "url": "/test",
+    "headers": {
+      "Accept": [
+        "*/*"
+      ],
+      "Content-Length": [
+        "4"
+      ],
+      "Content-Type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "User-Agent": [
+        "curl/7.78.0"
+      ]
+    },
+    "method": "POST",
+    "body": "test"
+  }
+]
 ```

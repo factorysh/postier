@@ -16,16 +16,14 @@ func Handle(m *history.Memory) http.Handler {
 		defer m.Mutex.Unlock()
 
 		if r.Method != http.MethodPost {
-			m.NonPostCounter++
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		content, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			m.ReadBodyErrorCounter++
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Error reading body content"))
+			w.Write([]byte("Error when reading body content"))
 			return
 		}
 
@@ -53,7 +51,7 @@ func HandleHistory(m *history.Memory) http.Handler {
 		m.Mutex.Lock()
 		defer m.Mutex.Unlock()
 
-		data, err := json.Marshal(m)
+		data, err := json.Marshal(m.Requests)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
