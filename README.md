@@ -1,6 +1,6 @@
 # Postier
 
-Save and serve all POST requests received on a defined HTTP endpoint (WIP).
+Save and then serve all those POST requests received on a defined HTTP endpoint (WIP).
 
 ## Build
 
