@@ -17,7 +17,7 @@ make
 2021/08/12 17:09:36 Info, history url /postier-history
 ```
 
-## Use
+## Usage
 
 ### As a standalone postier server
 
@@ -74,7 +74,22 @@ curl http://localhost:8042/postier-history | jq .
 ]
 ```
 
+### Configuration
+
+- HISTORY_ENDPOINT environment variable is used to change the name of the main endpoint (in case you need to post data to this specific endpoint)
+- LISTEN_URL environment variable is used to set the address and listening port (8042 is the default) of the server
+
 ### As a lib in Golang unit tests
+
+Here are the basic for testing stuff using postier
+
+1. start the server using `postester.StartTesting()` (this will start the server on a random available port), save the returned structure of kind `postester.Env`
+
+2. post data to the running server (url is available in the `postester.Env` struct)
+
+3. fetch history using `History()` method attached on the `postester.Env` struct
+
+4. assert and search for you requests in history (you can pre-filter requests using the available methods)
 
 See `examples/example_test.go`
 
