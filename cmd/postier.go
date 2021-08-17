@@ -18,7 +18,7 @@ func main() {
 
 	historyEndpoint := os.Getenv("HISTORY_ENDPOINT")
 	if historyEndpoint == "" {
-		log.Printf("Warning, no history endpoint provided, using default one (%s)\n", server.DefaultHistoryEndpoint)
+		log.Printf("Warning, no HISTORY_ENDPOINT provided, using default one (%s)\n", server.DefaultHistoryEndpoint)
 		historyEndpoint = server.DefaultHistoryEndpoint
 	}
 

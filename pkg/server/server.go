@@ -68,7 +68,6 @@ func StartWithControls(listener net.Listener, historyEndpoint string) (chan bool
 		if err := srv.Serve(listener); err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
-		log.Println("Server gracefully stopped")
 	}()
 
 	go func() {
