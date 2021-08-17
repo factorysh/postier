@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -19,7 +20,7 @@ const DefaultHistoryEndpoint = "/postier-history"
 const DefaultTimeout = 2 * time.Second
 
 // NewServer inits and return a configured postier server
-func NewServer(listenURL, historyEndpoint string) *http.Server {
+func NewServer(historyEndpoint string) (*http.Server, *history.Memory) {
 	m := history.NewMemory()
 
 	mux := http.NewServeMux()
@@ -27,16 +28,21 @@ func NewServer(listenURL, historyEndpoint string) *http.Server {
 	mux.Handle(historyEndpoint, handlers.HandleHistory(&m))
 
 	srv := &http.Server{
-		Addr:    listenURL,
 		Handler: mux,
 	}
 
-	return srv
+	return srv, &m
 }
 
 // Start inits and starts a new server with signal handling for gracefull stop
-func Start(listenURL, historyEndpoint string) {
-	remote, waiter := StartWithControls(listenURL, historyEndpoint)
+func Start(listenURL, historyEndpoint string) error {
+	l, err := net.Listen("tcp", listenURL)
+	if err != nil {
+		return err
+	}
+	defer l.Close()
+
+	remote, waiter, _ := StartWithControls(l, historyEndpoint)
 
 	go func() {
 		sigint := make(chan os.Signal, 1)
@@ -47,17 +53,19 @@ func Start(listenURL, historyEndpoint string) {
 	}()
 
 	<-waiter
+
+	return nil
 }
 
-// StartWithControls inits and starts the server, returning two controls channels (remote for shutdow, waiter for shutdown feedback)
-func StartWithControls(listenURL, historyEndpoint string) (chan bool, chan bool) {
-	srv := NewServer(listenURL, historyEndpoint)
+// StartWithControls inits and starts the server, returning two controls channels (remote for shutdow, waiter for shutdown feedback) and a pointer to history data
+func StartWithControls(listener net.Listener, historyEndpoint string) (chan bool, chan bool, *history.Memory) {
+	srv, memory := NewServer(historyEndpoint)
 	remote := make(chan bool)
 	waiter := make(chan bool)
 
 	go func() {
-		log.Printf("Server listening on %s with history endpoint set to %s", srv.Addr, historyEndpoint)
-		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+		log.Printf("Server listening on %s with history endpoint set to %s", listener.Addr(), historyEndpoint)
+		if err := srv.Serve(listener); err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
 		log.Println("Server gracefully stopped")
@@ -75,5 +83,5 @@ func StartWithControls(listenURL, historyEndpoint string) (chan bool, chan bool)
 		waiter <- true
 	}()
 
-	return remote, waiter
+	return remote, waiter, memory
 }

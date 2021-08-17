@@ -22,5 +22,8 @@ func main() {
 		historyEndpoint = server.DefaultHistoryEndpoint
 	}
 
-	server.Start(listenURL, historyEndpoint)
+	err := server.Start(listenURL, historyEndpoint)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
