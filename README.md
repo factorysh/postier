@@ -120,7 +120,7 @@ func TestExample(t *testing.T) {
 	assert.NoError(t, err)
 
 	// post request with fake data
-	resp, err := http.Post(fmt.Sprintf("%s/test", pt.URL), "application/json", bytes.NewReader(data))
+	resp, err := http.Post(fmt.Sprintf("http://%s/test", pt.URL), "application/json", bytes.NewReader(data))
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 

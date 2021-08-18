@@ -46,7 +46,7 @@ func StartTesting() (*Env, error) {
 
 	return &Env{
 		Port:            addr.Port,
-		URL:             fmt.Sprintf("http://%s:%d", localhost, addr.Port),
+		URL:             fmt.Sprintf("%s:%d", localhost, addr.Port),
 		HistoryEndpoint: server.DefaultHistoryEndpoint,
 		remote:          r,
 		waiter:          w,
